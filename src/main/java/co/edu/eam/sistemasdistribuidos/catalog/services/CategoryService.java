@@ -73,7 +73,7 @@ public class CategoryService {
         List<Category> allCategories = categoryRepository.findAll();
 
         if(allCategories.isEmpty()){
-            throw new BusinessException("There isn't any categories :(", "no_records");
+            throw new NotFoundException("There isn't any categories :(", "no_records");
         }
 
         return allCategories;
