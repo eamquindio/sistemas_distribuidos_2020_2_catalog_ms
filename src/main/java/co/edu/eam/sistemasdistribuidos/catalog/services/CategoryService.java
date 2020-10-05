@@ -84,7 +84,7 @@ public class CategoryService {
 
         List<Category> categoriesByName =  categoryRepository.getCategoryByName("%"+name+"%");
         if(categoriesByName.isEmpty()){
-            throw new BusinessException("There isn't any categories :(", "no_records");
+            throw new NotFoundException("There isn't any categories :(", "no_records");
         }
         return categoriesByName;
 
