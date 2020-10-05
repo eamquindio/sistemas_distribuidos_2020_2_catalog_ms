@@ -10,4 +10,5 @@ public class NotFoundException extends BusinessException {
     super(message);
     setErrorCode("entity_not_found");
   }
+
 }

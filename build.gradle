@@ -25,8 +25,8 @@ dependencies {
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
-	implementation 'org.flywaydb:flyway-core'
-	compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.4.7'
+	//implementation 'org.flywaydb:flyway-core'
+	//compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.4.7'
 }
 
 test {
