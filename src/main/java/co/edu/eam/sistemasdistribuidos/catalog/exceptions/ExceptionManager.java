@@ -1,9 +1,11 @@
 package co.edu.eam.sistemasdistribuidos.catalog.exceptions;
 
 
+
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,8 +50,6 @@ public class ExceptionManager {
     public ErrorMessage handleWithoutResultException(HttpServletRequest req, ExecutionResultException exc){
         return new ErrorMessage(exc.getMessage(), exc.getErrorCode());
     }
-
-
 
 
 }

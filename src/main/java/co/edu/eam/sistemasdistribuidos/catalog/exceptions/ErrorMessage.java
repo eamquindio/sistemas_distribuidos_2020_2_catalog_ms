@@ -1,6 +1,7 @@
 package co.edu.eam.sistemasdistribuidos.catalog.exceptions;
 
 public class ErrorMessage {
+
     private String message;
     private String code;
 

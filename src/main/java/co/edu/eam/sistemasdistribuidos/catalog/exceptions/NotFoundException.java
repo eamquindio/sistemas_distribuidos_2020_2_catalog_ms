@@ -2,6 +2,7 @@ package co.edu.eam.sistemasdistribuidos.catalog.exceptions;
 
 
 
+
 public class NotFoundException extends BusinessException{
 
 
@@ -9,4 +10,5 @@ public class NotFoundException extends BusinessException{
 
         super(message, ErrorCode);
     }
+
 }

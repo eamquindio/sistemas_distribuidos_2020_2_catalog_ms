@@ -1,5 +1,6 @@
 package co.edu.eam.sistemasdistribuidos.catalog.exceptions;
 
+
 public class BusinessException extends RuntimeException{
 
     private String ErrorCode;
@@ -18,4 +19,5 @@ public class BusinessException extends RuntimeException{
     public void setErrorCode(String errorCode) {
         ErrorCode = errorCode;
     }
+
 }
