@@ -27,7 +27,11 @@ public class ExceptionManager {
     return new ErrorMessage(exc.getMessage(), exc.getErrorCode());
   }
 
-  @ExceptionHandler({InvalidFormatException.class, MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
+  @ExceptionHandler({
+          InvalidFormatException.class,
+          MethodArgumentNotValidException.class,
+          HttpMessageNotReadableException.class,
+          MethodArgumentTypeMismatchException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ResponseBody
   public ErrorMessage handleParamsError(HttpServletRequest req, Exception exc){
@@ -55,25 +59,10 @@ public class ExceptionManager {
         return new ErrorMessage(exc.getMessage(), exc.getErrorCode());
     }
 
-  @ExceptionHandler({HttpMessageNotReadableException.class})
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ResponseBody
-  public ErrorMessage handleBadPathParams(HttpServletRequest req, Exception exc){
-    return new ErrorMessage(exc.getMessage(), "bad_request");
-  }
-
   @ExceptionHandler({NoSuchElementException.class})
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ResponseBody
   public ErrorMessage handleElementErrorException(HttpServletRequest req, Exception exc){
     return new ErrorMessage(exc.getMessage(), "element_doesnt_exist");
   }
-
-  @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ResponseBody
-  public ErrorMessage handleMismatchException(HttpServletRequest req, Exception exc){
-    return new ErrorMessage(exc.getMessage(), "mismatch_exception");
-  }
-
 }
