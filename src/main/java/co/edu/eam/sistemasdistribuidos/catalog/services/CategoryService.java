@@ -4,9 +4,12 @@ import co.edu.eam.sistemasdistribuidos.catalog.exceptions.BusinessException;
 import co.edu.eam.sistemasdistribuidos.catalog.exceptions.NotFoundException;
 import co.edu.eam.sistemasdistribuidos.catalog.models.Category;
 import co.edu.eam.sistemasdistribuidos.catalog.repositories.CategoryRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +19,12 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     public void create(Category c){
 
@@ -35,8 +44,15 @@ public class CategoryService {
     }
 
     public Category find(Integer id){
+        Category c = categoryRepository.findById(id).get();
 
-        return categoryRepository.findById(id).get();
+        //return categoryRepository.findById(id).get();
+        try {
+            redisTemplate.opsForValue().set(id.toString(), objectMapper.writeValueAsString(c));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return c;
 
     }
 
