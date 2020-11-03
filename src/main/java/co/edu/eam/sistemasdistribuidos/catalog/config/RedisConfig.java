@@ -14,7 +14,7 @@ public class RedisConfig {
 
     //establece la conexion con redis
     @Bean
-    JedisConnectionFactory jedisConnectionFactory(){return jedisConnectionFactory();}
+    JedisConnectionFactory jedisConnectionFactory(){return new JedisConnectionFactory();}
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(){
@@ -22,6 +22,8 @@ public class RedisConfig {
         RedisTemplate<String, String> Template = new RedisTemplate<>();
         Template.setKeySerializer(new StringRedisSerializer());
         Template.setValueSerializer(new StringRedisSerializer());
+
+
 
         //se conecta y manda datos a redis
         Template.setConnectionFactory(jedisConnectionFactory());
