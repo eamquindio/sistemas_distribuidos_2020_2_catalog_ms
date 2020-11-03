@@ -59,7 +59,6 @@ public class CategoryService {
     }
 
     @Cacheable(value = "category", key = "#id")
-
     public Category find(Integer id){
        // Category c = categoryRepository.findById(id).get();
 
@@ -105,7 +104,9 @@ public class CategoryService {
     }
 
 
+
     public List<Category> getAll(){
+
 
         List<Category> allCategories = categoryRepository.findAll();
 
@@ -113,8 +114,18 @@ public class CategoryService {
             throw new NotFoundException("There isn't any categories :(", "no_records");
         }
 
-        return allCategories;
+       // redisTemplate.opsForHash().put("categories2", "map", allCategories.toString());
 
+        for (int i=0;i<allCategories.size();i++){
+            Category c =allCategories.get(i);
+            try {
+               redisTemplate.opsForValue().set(c.getId().toString(), objectMapper.writeValueAsString(c),60,TimeUnit.SECONDS);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+       }
+
+        return allCategories;
     }
 
     public List<Category> getByName(String name){
@@ -123,6 +134,16 @@ public class CategoryService {
         if(categoriesByName.isEmpty()){
             throw new NotFoundException("There isn't any categories :(", "no_records");
         }
+
+        for (int i=0;i<categoriesByName.size();i++){
+            Category c =categoriesByName.get(i);
+            try {
+                redisTemplate.opsForValue().set(c.getId().toString(), objectMapper.writeValueAsString(c),60,TimeUnit.SECONDS);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
         return categoriesByName;
 
     }
