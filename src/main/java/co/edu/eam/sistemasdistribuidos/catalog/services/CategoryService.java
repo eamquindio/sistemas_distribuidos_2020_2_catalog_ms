@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.sax.SAXSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -106,44 +107,85 @@ public class CategoryService {
 
 
     public List<Category> getAll(){
+        List<String> allCategorie = redisTemplate.opsForList().range("liscategories",0,-1);
+        List<Category> allCategories = new ArrayList<>();
+        String datos="";
+        if (allCategorie.size()>0){
+            System.out.println("estos son los datos que estan en cache"+allCategorie.size());
+            for (int i=0;i<allCategorie.size();i++){
+                System.out.println("estos son los datos que estan en cache"+allCategorie.get(i));
+               datos = allCategorie.get(i);
+                try {
+                    Category c =   objectMapper.readValue(datos, Category.class);
+                    allCategories.add(c);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return  allCategories;
+        }else {
+             allCategories = categoryRepository.findAll();
+
+            if (allCategories.isEmpty()) {
+                throw new NotFoundException("There isn't any categories :(", "no_records");
+            }
 
 
-        List<Category> allCategories = categoryRepository.findAll();
+            for (int i = 0; i < allCategories.size(); i++) {
+                Category c = allCategories.get(i);
+                try {
+                    redisTemplate.opsForList().leftPush("liscategories", objectMapper.writeValueAsString(c));
 
-        if(allCategories.isEmpty()){
-            throw new NotFoundException("There isn't any categories :(", "no_records");
+                    //redisTemplate.opsForValue().set("listacate", objectMapper.writeValueAsString(c),60,TimeUnit.SECONDS);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+            redisTemplate.expire("liscategories",60,TimeUnit.SECONDS);
         }
 
-       // redisTemplate.opsForHash().put("categories2", "map", allCategories.toString());
+            return allCategories;
 
-        for (int i=0;i<allCategories.size();i++){
-            Category c =allCategories.get(i);
-            try {
-               redisTemplate.opsForValue().set(c.getId().toString(), objectMapper.writeValueAsString(c),60,TimeUnit.SECONDS);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-       }
-
-        return allCategories;
     }
 
     public List<Category> getByName(String name){
 
-        List<Category> categoriesByName =  categoryRepository.getCategoryByName("%"+name+"%");
-        if(categoriesByName.isEmpty()){
-            throw new NotFoundException("There isn't any categories :(", "no_records");
-        }
-
-        for (int i=0;i<categoriesByName.size();i++){
-            Category c =categoriesByName.get(i);
-            try {
-                redisTemplate.opsForValue().set(c.getId().toString(), objectMapper.writeValueAsString(c),60,TimeUnit.SECONDS);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
+        List<Category> categoriesByName = new ArrayList<>();
+        List<String> allCategorie = redisTemplate.opsForList().range(name,0,-1);
+        String datos="";
+        if (allCategorie.size()>0){
+            System.out.println("estos son los datos que estan en cache"+allCategorie.size());
+            for (int i=0;i<allCategorie.size();i++){
+                System.out.println("estos son los datos que estan en cache"+allCategorie.get(i));
+                datos = allCategorie.get(i);
+                try {
+                    Category c =   objectMapper.readValue(datos, Category.class);
+                    categoriesByName.add(c);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
             }
-        }
 
+            return  categoriesByName;
+        }else {
+           categoriesByName =  categoryRepository.getCategoryByName("%"+name+"%");
+            if(categoriesByName.isEmpty()){
+                throw new NotFoundException("There isn't any categories :(", "no_records");
+            }
+
+            for (int i = 0; i < categoriesByName.size(); i++) {
+                Category c = categoriesByName.get(i);
+                try {
+                    redisTemplate.opsForList().leftPush(name, objectMapper.writeValueAsString(c));
+
+                    //redisTemplate.opsForValue().set("listacate", objectMapper.writeValueAsString(c),60,TimeUnit.SECONDS);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+            redisTemplate.expire(name,60,TimeUnit.SECONDS);
+        }
         return categoriesByName;
 
     }
