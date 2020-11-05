@@ -25,12 +25,12 @@ public class DiscountsController {
         discountsService.create(d);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public void update(@PathVariable Integer id, @RequestBody Discounts d){
         discountsService.update(id, d);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id){
         discountsService.delete(id);
     }
