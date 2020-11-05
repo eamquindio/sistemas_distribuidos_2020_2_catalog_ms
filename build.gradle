@@ -19,9 +19,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'redis.clients:jedis'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -31,7 +31,7 @@ dependencies {
 
 
 
-   //implementation 'org.flywaydb:flyway-core'
+   implementation 'org.flywaydb:flyway-core'
    compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.4.7'
 
 
