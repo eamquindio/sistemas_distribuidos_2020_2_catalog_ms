@@ -5,33 +5,27 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @Entity
-//@Table(name = "categoria")
-@Table(name = "category")
+@Table(name = "categoria")
 public class Category implements Serializable {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name="idcategoria")
-    @Column(name="category_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="idcategoria")
     private Integer id;
 
-    //@Column(name = "nombrecategoria")
-    @Column(name = "category_name")
+    @Column(name = "nombrecategoria")
     @NotBlank(message="This is not a valid name")
     @NotEmpty(message="Name is obligatory")
     @NotNull(message="Name is obligatory")
     @Size(min = 4, max = 50, message = "More than 4 characters but less than 45.")
     private String name;
 
-    //public Category() {
-    //this.setId(0);
-    //}
+    public Category() {
+        this.setId(0);
+    }
 
-    public Category(){}
-
-    public Category(Integer id,String name) {
+    public Category(String name) {
         this.name = name;
-        this.id = id;
     }
 
     public Integer getId() {
